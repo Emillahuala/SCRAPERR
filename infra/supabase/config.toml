@@ -1,0 +1,18 @@
+# Supabase local development config
+# Generado manualmente — ejecutar `supabase init` cuando el CLI esté disponible
+# y vincular con `supabase link --project-ref <tu-project-ref>` en Fase 1.
+
+[api]
+port = 54321
+
+[db]
+port = 54322
+
+[studio]
+port = 54323
+
+[inbucket]
+port = 54324
+
+[storage]
+file_size_limit = "50MiB"

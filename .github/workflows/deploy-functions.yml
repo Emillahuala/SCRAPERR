@@ -1,0 +1,29 @@
+name: Deploy — Edge Functions
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - 'infra/supabase/functions/**'   # activo desde Fase 4
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Deploy refresh-deals
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: supabase functions deploy refresh-deals --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
+
+      - name: Deploy dispatch-notifications
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: supabase functions deploy dispatch-notifications --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}

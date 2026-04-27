@@ -1,0 +1,37 @@
+name: CI — Scraper
+
+on:
+  push:
+    paths:
+      - 'services/scraper/**'
+      - '.github/workflows/ci-scraper.yml'
+  pull_request:
+    paths:
+      - 'services/scraper/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/scraper
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: uv sync --extra dev
+
+      - name: Lint (ruff)
+        run: uv run ruff check .
+
+      - name: Type check (mypy)
+        run: uv run mypy src
+
+      - name: Tests
+        run: uv run pytest --cov=scraper --cov-report=term-missing
