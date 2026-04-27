@@ -7,12 +7,19 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from supabase import Client, create_client
 
 # Catalogue of region paths on cruceros.cl. SCRAPER_REGIONS picks a subset by name.
+# IDs verified 2026-04-27 against the live homepage (the spec's IDs were stale).
 REGION_PATHS: Final[dict[str, str]] = {
-    "caribe":       "/d-26-caribe",
-    "mediterraneo": "/d-25-mediterraneo",
-    "sudamerica":   "/d-113-sudamerica",
-    "fiordos":      "/d-30-fiordos",
-    "chile":        "/d-540-chile",
+    "caribe":         "/d-7541-caribe",
+    "mediterraneo":   "/d-35-mediterraneo",
+    "sudamerica":     "/d-113-sudamerica",
+    "fiordos":        "/d-41-fiordos-escandinavia",
+    "bahamas":        "/d-17-bahamas",
+    "antillas":       "/d-23-antillas",
+    "tahiti":         "/d-137-tahiti",
+    "islas_griegas":  "/d-71-islas-griegas",
+    "transatlantico": "/d-401-transatlantico",
+    "artico":         "/d-371-artico",
+    "vuelta_mundo":   "/d-341-vuelta-al-mundo",
 }
 
 
@@ -33,7 +40,7 @@ class Settings(BaseSettings):
 
     # Scraper
     scraper_log_level: str = "INFO"
-    scraper_regions: str = "caribe,mediterraneo,sudamerica,fiordos,chile"
+    scraper_regions: str = "caribe,mediterraneo,sudamerica,fiordos"
     scraper_min_delay_seconds: float = 2.0
     scraper_max_delay_seconds: float = 5.0
 

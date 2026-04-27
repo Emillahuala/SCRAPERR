@@ -12,16 +12,20 @@ from scraper.core.base_scraper import BaseScraper
 from scraper.core.http_client import HttpClient
 from scraper.core.logger import configure_logging
 from scraper.pipelines.supabase_pipeline import SupabasePipeline
+from scraper.spiders.cruceros_cl import CrucerosClHomeSpider
 
 app = typer.Typer(no_args_is_help=True, add_completion=False)
 
 
 def _build_scraper(site: str, settings: Settings, http: HttpClient) -> BaseScraper:
     """Resolve a spider class by site name. Spiders register here as they land."""
+    if site == "cruceros_cl_home":
+        return CrucerosClHomeSpider(http)
     if site == "cruceros_cl":
-        # Implemented in Phase 2 — part 2 once we have HTML samples.
+        # Full per-region spider lands when we have listing + detail HTML samples.
         raise typer.BadParameter(
-            "cruceros_cl spider not yet implemented (waiting for HTML samples)"
+            "cruceros_cl spider not yet implemented (waiting for HTML samples). "
+            "Use --site cruceros_cl_home for the homepage carousel (~32 deals)."
         )
     raise typer.BadParameter(f"Unknown site '{site}'")
 

@@ -60,6 +60,9 @@ class TestParseDateEs:
             ("31 de diciembre de 2027", date(2027, 12, 31)),
             ("22/02/2027", date(2027, 2, 22)),
             ("01/01/2026", date(2026, 1, 1)),
+            # Single-digit day/month (cruceros.cl card format)
+            ("16/5/2026", date(2026, 5, 16)),
+            ("1/1/2026", date(2026, 1, 1)),
             ("2027-02-22", date(2027, 2, 22)),
             ("22-02-2027", date(2027, 2, 22)),
             # Whitespace and case
