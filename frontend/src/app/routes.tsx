@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import { AppLayout } from './layout'
 import { DealsList } from '@/features/deals/DealsList'
 import { SailingDetail } from '@/features/sailing-detail/SailingDetail'
+import { AlertsList } from '@/features/alerts/AlertsList'
 import { LoginPage } from '@/features/auth/LoginPage'
 
 export const router = createBrowserRouter([
@@ -15,6 +16,10 @@ export const router = createBrowserRouter([
       {
         path: '/sailing/:id',
         element: <SailingDetail />,
+      },
+      {
+        path: '/alerts',
+        element: <AlertsList />,
       },
     ],
   },

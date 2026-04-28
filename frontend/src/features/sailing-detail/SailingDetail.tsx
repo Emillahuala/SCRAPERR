@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formatDate, formatNights, dealScoreLabel } from '@/lib/format'
+import { AlertForm } from '@/features/alerts/AlertForm'
 import { useSailing, usePriceHistory } from './useSailing'
 import { KpiRow } from './KpiRow'
 import { PriceChart } from './PriceChart'
@@ -25,6 +27,7 @@ function SailingDetailSkeleton() {
 export function SailingDetail() {
   const { id } = useParams<{ id: string }>()
   const sailingId = id ? parseInt(id, 10) : 0
+  const [alertFormOpen, setAlertFormOpen] = useState(false)
 
   const { data: sailing, isLoading: sailingLoading, isError } = useSailing(sailingId)
   const { data: history = [], isLoading: historyLoading } = usePriceHistory(sailingId)
@@ -76,18 +79,25 @@ export function SailingDetail() {
       {/* Price history chart */}
       <PriceChart data={history} avgPrice180d={sailing.avg_price_180d} />
 
-      {/* CTA */}
-      <div className="flex justify-end">
+      {/* CTAs */}
+      <div className="flex flex-wrap justify-end gap-3">
+        <Button variant="outline" onClick={() => setAlertFormOpen(true)}>
+          🔔 Crear alerta para este zarpe
+        </Button>
         <Button asChild>
-          <a
-            href={`https://cruceros.cl`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="https://cruceros.cl" target="_blank" rel="noopener noreferrer">
             Ver en cruceros.cl ↗
           </a>
         </Button>
       </div>
+
+      {/* Alert creation modal */}
+      <AlertForm
+        open={alertFormOpen}
+        onOpenChange={setAlertFormOpen}
+        defaultSailingId={sailingId}
+        defaultRegion={sailing.region}
+      />
     </div>
   )
 }

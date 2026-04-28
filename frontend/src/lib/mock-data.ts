@@ -273,3 +273,62 @@ export const MOCK_PRICE_HISTORY: Record<number, PriceHistoryPoint[]> = {
   9: generatePriceHistory(9, 980),
   10: generatePriceHistory(10, 12500),
 }
+
+// ---------------------------------------------------------------------------
+// Mock alerts — 3 alerts for the demo user
+// ---------------------------------------------------------------------------
+export interface MockAlert {
+  id: string
+  user_id: string
+  region: string | null
+  cruise_line_id: number | null
+  sailing_id: number | null
+  cabin_type: string | null
+  max_price_usd: number | null
+  min_z_score: number | null
+  channel: 'email' | 'telegram' | 'push'
+  active: boolean
+  created_at: string
+}
+
+export const MOCK_ALERTS: MockAlert[] = [
+  {
+    id: 'alert-1',
+    user_id: 'mock-user-id',
+    region: 'caribe',
+    cruise_line_id: null,
+    sailing_id: null,
+    cabin_type: 'Interior',
+    max_price_usd: 1000,
+    min_z_score: -2.0,
+    channel: 'email',
+    active: true,
+    created_at: '2026-04-01T10:00:00Z',
+  },
+  {
+    id: 'alert-2',
+    user_id: 'mock-user-id',
+    region: null,
+    cruise_line_id: 2,
+    sailing_id: null,
+    cabin_type: null,
+    max_price_usd: 2000,
+    min_z_score: -2.5,
+    channel: 'email',
+    active: true,
+    created_at: '2026-04-10T14:30:00Z',
+  },
+  {
+    id: 'alert-3',
+    user_id: 'mock-user-id',
+    region: null,
+    cruise_line_id: null,
+    sailing_id: 3,
+    cabin_type: 'Suite',
+    max_price_usd: 5000,
+    min_z_score: -2.0,
+    channel: 'email',
+    active: false,
+    created_at: '2026-04-15T09:00:00Z',
+  },
+]
