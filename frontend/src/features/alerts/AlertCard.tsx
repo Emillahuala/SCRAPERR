@@ -49,14 +49,16 @@ export function AlertCard({ alert }: AlertCardProps) {
   const toggle = useToggleAlert()
   const remove = useDeleteAlert()
 
+  // `active` is nullable in the DB schema — default to false (treat null as inactive)
+  const isActive = alert.active ?? false
   const lines = criteriaLines(alert)
 
   return (
-    <Card className={alert.active ? '' : 'opacity-60'}>
+    <Card className={isActive ? '' : 'opacity-60'}>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between gap-2">
-          <Badge variant={alert.active ? 'success' : 'outline'}>
-            {alert.active ? 'Activa' : 'Pausada'}
+          <Badge variant={isActive ? 'success' : 'outline'}>
+            {isActive ? 'Activa' : 'Pausada'}
           </Badge>
           <span className="text-xs text-muted-foreground">
             {alert.channel === 'email' ? '📧' : alert.channel === 'telegram' ? '✈️' : '🔔'}{' '}
@@ -91,9 +93,9 @@ export function AlertCard({ alert }: AlertCardProps) {
             size="sm"
             className="flex-1"
             disabled={toggle.isPending}
-            onClick={() => toggle.mutate({ id: alert.id, active: !alert.active })}
+            onClick={() => toggle.mutate({ id: alert.id, active: !isActive })}
           >
-            {alert.active ? 'Pausar' : 'Activar'}
+            {isActive ? 'Pausar' : 'Activar'}
           </Button>
           <Button
             variant="destructive"

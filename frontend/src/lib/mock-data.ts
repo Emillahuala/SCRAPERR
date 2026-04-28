@@ -277,6 +277,11 @@ export const MOCK_PRICE_HISTORY: Record<number, PriceHistoryPoint[]> = {
 // ---------------------------------------------------------------------------
 // Mock alerts — 3 alerts for the demo user
 // ---------------------------------------------------------------------------
+/**
+ * MockAlert mirrors Database['public']['Tables']['alerts']['Row'] exactly —
+ * including nullable `active` and `created_at` — so that components written
+ * against MockAlert will work without changes when Supabase is integrated.
+ */
 export interface MockAlert {
   id: string
   user_id: string
@@ -287,8 +292,8 @@ export interface MockAlert {
   max_price_usd: number | null
   min_z_score: number | null
   channel: 'email' | 'telegram' | 'push'
-  active: boolean
-  created_at: string
+  active: boolean | null    // nullable — matches alerts.Row
+  created_at: string | null // nullable — matches alerts.Row
 }
 
 export const MOCK_ALERTS: MockAlert[] = [

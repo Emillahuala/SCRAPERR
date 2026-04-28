@@ -11,8 +11,18 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { MOCK_ALERTS, type MockAlert } from '@/lib/mock-data'
 
-// In-memory store so mutations persist within the session
+/**
+ * In-memory store — mutations persist for the lifetime of the browser session.
+ * This is intentional in mock mode so the user sees their changes across navigations.
+ *
+ * For test isolation: call `resetMockAlerts()` in beforeEach / afterEach.
+ */
 let _mockAlerts: MockAlert[] = [...MOCK_ALERTS]
+
+/** Reset the in-memory store to the original seed data. Useful in tests. */
+export function resetMockAlerts(): void {
+  _mockAlerts = [...MOCK_ALERTS]
+}
 
 export type AlertChannel = 'email' | 'telegram' | 'push'
 
