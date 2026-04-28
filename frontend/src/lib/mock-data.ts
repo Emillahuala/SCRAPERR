@@ -337,3 +337,147 @@ export const MOCK_ALERTS: MockAlert[] = [
     created_at: '2026-04-15T09:00:00Z',
   },
 ]
+
+// ---------------------------------------------------------------------------
+// Insights mock data
+// ---------------------------------------------------------------------------
+
+/** KPI summary derived from current deals */
+export interface KpiSummary {
+  totalActiveDeals: number
+  avgSavingsPct: number       // 0-100
+  bestRegion: string
+  cheapestPrice: number
+  cheapestItinerary: string
+  avgDealScore: number
+}
+
+export const MOCK_KPI_SUMMARY: KpiSummary = (function () {
+  const savings = MOCK_DEALS.map((d) => {
+    const avg = d.avg_price_180d
+    const cur = d.current_price
+    if (!avg || !cur || avg <= cur) return 0
+    return ((avg - cur) / avg) * 100
+  })
+  const scores = MOCK_DEALS.map((d) => d.deal_score ?? 0)
+
+  // count deals per region and pick the one with highest avg score
+  const regionScores: Record<string, number[]> = {}
+  for (const d of MOCK_DEALS) {
+    const r = d.region ?? 'otro'
+    regionScores[r] = regionScores[r] ?? []
+    regionScores[r].push(d.deal_score ?? 0)
+  }
+  const bestRegion = Object.entries(regionScores)
+    .map(([r, sc]) => ({ r, avg: sc.reduce((a, b) => a + b, 0) / sc.length }))
+    .sort((a, b) => b.avg - a.avg)[0]?.r ?? '—'
+
+  const cheapestDeal = [...MOCK_DEALS].sort(
+    (a, b) => (a.current_price ?? Infinity) - (b.current_price ?? Infinity),
+  )[0]
+
+  const avg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length
+
+  return {
+    totalActiveDeals: MOCK_DEALS.length,
+    avgSavingsPct: Math.round(avg(savings)),
+    bestRegion,
+    cheapestPrice: cheapestDeal.current_price ?? 0,
+    cheapestItinerary: cheapestDeal.itinerary ?? '—',
+    avgDealScore: Math.round(avg(scores)),
+  }
+})()
+
+// ---------------------------------------------------------------------------
+// Heatmap: region × month → avg deal score
+// ---------------------------------------------------------------------------
+export const HEATMAP_REGIONS = [
+  'caribe',
+  'mediterraneo',
+  'fiordos',
+  'antillas',
+  'sudamerica',
+  'bahamas',
+  'islas_griegas',
+] as const
+
+export type HeatmapRegion = (typeof HEATMAP_REGIONS)[number]
+
+export const REGION_DISPLAY: Record<HeatmapRegion, string> = {
+  caribe: 'Caribe',
+  mediterraneo: 'Mediterráneo',
+  fiordos: 'Fiordos',
+  antillas: 'Antillas',
+  sudamerica: 'Sudamérica',
+  bahamas: 'Bahamas',
+  islas_griegas: 'Islas Griegas',
+}
+
+export const MONTH_NAMES = [
+  'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+  'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic',
+]
+
+// deal_score 0-100: green intensity. Realistic seasonal patterns.
+const RAW_HEATMAP: Record<HeatmapRegion, number[]> = {
+  //                   E    F    M    A    M    J    J    A    S    O    N    D
+  caribe:         [85, 82, 74, 68, 61, 55, 59, 63, 58, 65, 78, 88],
+  mediterraneo:   [40, 42, 55, 68, 78, 88, 91, 89, 82, 70, 52, 38],
+  fiordos:        [20, 22, 35, 50, 72, 85, 90, 88, 75, 55, 30, 18],
+  antillas:       [82, 80, 72, 65, 58, 52, 55, 60, 55, 62, 75, 84],
+  sudamerica:     [75, 72, 68, 60, 52, 45, 42, 45, 55, 65, 72, 76],
+  bahamas:        [80, 78, 70, 65, 60, 58, 62, 65, 60, 68, 75, 82],
+  islas_griegas:  [35, 38, 50, 65, 78, 88, 92, 90, 82, 68, 48, 32],
+}
+
+export interface HeatmapCell {
+  region: HeatmapRegion
+  month: number // 0-based
+  score: number
+}
+
+export const MOCK_HEATMAP: HeatmapCell[] = HEATMAP_REGIONS.flatMap((region) =>
+  RAW_HEATMAP[region].map((score, month) => ({ region, month, score })),
+)
+
+// ---------------------------------------------------------------------------
+// Trend: avg price per region, last 90 days
+// ---------------------------------------------------------------------------
+export interface TrendPoint {
+  date: string
+  caribe: number
+  mediterraneo: number
+  fiordos: number
+  sudamerica: number
+}
+
+export const MOCK_TREND: TrendPoint[] = (function () {
+  const points: TrendPoint[] = []
+  const now = new Date('2026-04-27')
+
+  // Base prices per region (approx avg for reference cabin)
+  let caribe = 1020
+  let mediterraneo = 1850
+  let fiordos = 5100
+  let sudamerica = 2600
+
+  for (let i = 89; i >= 0; i--) {
+    const d = new Date(now)
+    d.setDate(d.getDate() - i)
+
+    // Gradual downward drift + noise
+    caribe = Math.max(780, caribe + (Math.random() - 0.52) * 35 - 1)
+    mediterraneo = Math.max(1200, mediterraneo + (Math.random() - 0.52) * 55 - 2)
+    fiordos = Math.max(4000, fiordos + (Math.random() - 0.51) * 120 - 3)
+    sudamerica = Math.max(2000, sudamerica + (Math.random() - 0.51) * 60 - 2)
+
+    points.push({
+      date: d.toISOString().slice(0, 10),
+      caribe: Math.round(caribe),
+      mediterraneo: Math.round(mediterraneo),
+      fiordos: Math.round(fiordos),
+      sudamerica: Math.round(sudamerica),
+    })
+  }
+  return points
+})()

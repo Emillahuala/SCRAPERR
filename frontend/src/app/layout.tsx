@@ -2,6 +2,7 @@ import { Outlet, Link, NavLink } from 'react-router-dom'
 import { useAuth, signOut } from '@/features/auth/useAuth'
 import { useAlertNotifications } from '@/features/alerts/useAlertNotifications'
 import { Button } from '@/components/ui/button'
+import { useTheme } from './theme'
 import { cn } from '@/lib/utils'
 
 function NavItem({ to, children }: { to: string; children: React.ReactNode }) {
@@ -20,9 +21,22 @@ function NavItem({ to, children }: { to: string; children: React.ReactNode }) {
   )
 }
 
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme()
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={toggleTheme}
+      aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+    >
+      {theme === 'dark' ? '☀️' : '🌙'}
+    </Button>
+  )
+}
+
 export function AppLayout() {
   const { user } = useAuth()
-  // Wire up Realtime notifications (no-op in mock mode)
   useAlertNotifications(user?.id)
 
   return (
@@ -37,13 +51,15 @@ export function AppLayout() {
             <nav className="hidden sm:flex items-center gap-5">
               <NavItem to="/">Ofertas</NavItem>
               <NavItem to="/alerts">Mis alertas</NavItem>
+              <NavItem to="/insights">Insights</NavItem>
             </nav>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
             {user ? (
               <>
-                <span className="hidden sm:block text-sm text-muted-foreground">
+                <span className="hidden sm:block text-sm text-muted-foreground ml-2">
                   {user.email}
                 </span>
                 <Button variant="ghost" size="sm" onClick={() => void signOut()}>
@@ -51,7 +67,7 @@ export function AppLayout() {
                 </Button>
               </>
             ) : (
-              <Button asChild size="sm" variant="outline">
+              <Button asChild size="sm" variant="outline" className="ml-2">
                 <Link to="/login">Iniciar sesión</Link>
               </Button>
             )}
@@ -62,6 +78,7 @@ export function AppLayout() {
         <div className="sm:hidden flex border-t px-4 py-2 gap-4">
           <NavItem to="/">Ofertas</NavItem>
           <NavItem to="/alerts">Mis alertas</NavItem>
+          <NavItem to="/insights">Insights</NavItem>
         </div>
       </header>
 

@@ -9,6 +9,22 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // React core — changes rarely
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          // Data / state
+          'vendor-query': ['@tanstack/react-query', 'zustand'],
+          // Charts — largest single dependency
+          'vendor-recharts': ['recharts'],
+          // Supabase client
+          'vendor-supabase': ['@supabase/supabase-js'],
+        },
+      },
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',
