@@ -1,7 +1,3 @@
-export default function App() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background text-foreground">
-      <h1 className="text-2xl font-semibold">OfferHunter</h1>
-    </div>
-  )
-}
+// Entry point is now src/main.tsx → app/routes.tsx
+// This file is kept as an empty re-export placeholder.
+export {}
