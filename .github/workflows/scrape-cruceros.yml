@@ -2,6 +2,9 @@ name: Scrape — cruceros.cl
 
 on:
   workflow_dispatch:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/scrape-cruceros.yml']
   # schedule:
   #   - cron: '0 */6 * * *'   # activo desde Fase 3
 
