@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
+import { getSupabaseClient } from '@/lib/supabase'
 import { MOCK_DEALS } from '@/lib/mock-data'
 import type { Database } from '@/types/database'
 import type { DealsFilters } from '@/store/filters-store'
 
 type DealRow = Database['public']['Views']['current_deals']['Row']
 
-/** Apply client-side filters to the deals list. */
 function applyFilters(deals: DealRow[], filters: DealsFilters): DealRow[] {
   return deals.filter((d) => {
     if (filters.region && d.region !== filters.region) return false
@@ -17,12 +17,18 @@ function applyFilters(deals: DealRow[], filters: DealsFilters): DealRow[] {
 }
 
 async function fetchDeals(): Promise<DealRow[]> {
-  // TODO: replace with real Supabase query when integrated
-  // const supabase = getSupabaseClient()
-  // const { data, error } = await supabase.from('current_deals').select('*').eq('is_180d_low', true)
-  // if (error) throw error
-  // return data ?? []
-  return Promise.resolve(MOCK_DEALS)
+  const client = getSupabaseClient()
+  if (!client) return MOCK_DEALS
+
+  const { data, error } = await client
+    .from('current_deals')
+    .select('*')
+    .eq('is_180d_low', true)
+    .order('deal_score', { ascending: false })
+    .limit(100)
+
+  if (error) throw new Error(error.message)
+  return data ?? []
 }
 
 export function useDeals(filters: DealsFilters) {

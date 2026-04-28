@@ -1,25 +1,14 @@
-/**
- * useAlerts — CRUD de alertas del usuario.
- *
- * Mock mode: opera sobre un array en memoria (React state vía Zustand).
- * Supabase mode (TODO): reemplazar queryFn/mutationFn con llamadas al cliente.
- *
- * RLS garantiza que cada usuario solo ve sus propias alertas —
- * en mock mode simplemente filtramos por MOCK_USER_ID.
- */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { getSupabaseClient } from '@/lib/supabase'
 import { MOCK_ALERTS, type MockAlert } from '@/lib/mock-data'
 
 /**
- * In-memory store — mutations persist for the lifetime of the browser session.
- * This is intentional in mock mode so the user sees their changes across navigations.
- *
- * For test isolation: call `resetMockAlerts()` in beforeEach / afterEach.
+ * In-memory store — mock mode only.
+ * Mutations persist for the lifetime of the browser session.
+ * Call resetMockAlerts() in beforeEach for test isolation.
  */
 let _mockAlerts: MockAlert[] = [...MOCK_ALERTS]
-
-/** Reset the in-memory store to the original seed data. Useful in tests. */
 export function resetMockAlerts(): void {
   _mockAlerts = [...MOCK_ALERTS]
 }
@@ -36,39 +25,75 @@ export interface AlertFormValues {
   channel: AlertChannel
 }
 
+/** Normalize a DB alerts row to MockAlert shape (narrows channel to union). */
+function normalizeAlert(row: {
+  id: string
+  user_id: string
+  region: string | null
+  cruise_line_id: number | null
+  sailing_id: number | null
+  cabin_type: string | null
+  max_price_usd: number | null
+  min_z_score: number | null
+  channel: string | null
+  active: boolean | null
+  created_at: string | null
+}): MockAlert {
+  const validChannels: AlertChannel[] = ['email', 'telegram', 'push']
+  const channel = validChannels.includes(row.channel as AlertChannel)
+    ? (row.channel as AlertChannel)
+    : 'email'
+  return { ...row, channel }
+}
+
 // ---------------------------------------------------------------------------
 // Fetch
 // ---------------------------------------------------------------------------
 async function fetchAlerts(): Promise<MockAlert[]> {
-  // TODO: replace with Supabase query when integrated
-  // const supabase = getSupabaseClient()
-  // const { data, error } = await supabase.from('alerts').select('*').eq('user_id', userId).order('created_at', { ascending: false })
-  // if (error) throw error
-  // return data ?? []
-  return Promise.resolve([..._mockAlerts])
+  const client = getSupabaseClient()
+  if (!client) return [..._mockAlerts]
+
+  const { data, error } = await client
+    .from('alerts')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) throw new Error(error.message)
+  return (data ?? []).map(normalizeAlert)
 }
 
 export function useAlerts() {
-  return useQuery({
-    queryKey: ['alerts'],
-    queryFn: fetchAlerts,
-  })
+  return useQuery({ queryKey: ['alerts'], queryFn: fetchAlerts })
 }
 
 // ---------------------------------------------------------------------------
 // Create
 // ---------------------------------------------------------------------------
 async function createAlert(values: AlertFormValues): Promise<MockAlert> {
-  // TODO: replace with Supabase insert
-  const newAlert: MockAlert = {
-    id: `alert-${Date.now()}`,
-    user_id: 'mock-user-id',
-    ...values,
-    active: true,
-    created_at: new Date().toISOString(),
+  const client = getSupabaseClient()
+  if (!client) {
+    const newAlert: MockAlert = {
+      id: `alert-${Date.now()}`,
+      user_id: 'mock-user-id',
+      ...values,
+      active: true,
+      created_at: new Date().toISOString(),
+    }
+    _mockAlerts = [newAlert, ..._mockAlerts]
+    return newAlert
   }
-  _mockAlerts = [newAlert, ..._mockAlerts]
-  return newAlert
+
+  const { data: { session } } = await client.auth.getSession()
+  if (!session) throw new Error('No autenticado')
+
+  const { data, error } = await client
+    .from('alerts')
+    .insert({ ...values, user_id: session.user.id, channel: values.channel })
+    .select()
+    .single()
+
+  if (error) throw new Error(error.message)
+  return normalizeAlert(data)
 }
 
 export function useCreateAlert() {
@@ -79,9 +104,7 @@ export function useCreateAlert() {
       void qc.invalidateQueries({ queryKey: ['alerts'] })
       toast.success('Alerta creada correctamente')
     },
-    onError: (err: Error) => {
-      toast.error(`Error al crear la alerta: ${err.message}`)
-    },
+    onError: (err: Error) => toast.error(`Error al crear la alerta: ${err.message}`),
   })
 }
 
@@ -89,8 +112,13 @@ export function useCreateAlert() {
 // Toggle active
 // ---------------------------------------------------------------------------
 async function toggleAlert({ id, active }: { id: string; active: boolean }): Promise<void> {
-  // TODO: replace with Supabase update
-  _mockAlerts = _mockAlerts.map((a) => (a.id === id ? { ...a, active } : a))
+  const client = getSupabaseClient()
+  if (!client) {
+    _mockAlerts = _mockAlerts.map((a) => (a.id === id ? { ...a, active } : a))
+    return
+  }
+  const { error } = await client.from('alerts').update({ active }).eq('id', id)
+  if (error) throw new Error(error.message)
 }
 
 export function useToggleAlert() {
@@ -101,9 +129,7 @@ export function useToggleAlert() {
       void qc.invalidateQueries({ queryKey: ['alerts'] })
       toast.success(active ? 'Alerta activada' : 'Alerta pausada')
     },
-    onError: (err: Error) => {
-      toast.error(`Error: ${err.message}`)
-    },
+    onError: (err: Error) => toast.error(`Error: ${err.message}`),
   })
 }
 
@@ -111,8 +137,13 @@ export function useToggleAlert() {
 // Delete
 // ---------------------------------------------------------------------------
 async function deleteAlert(id: string): Promise<void> {
-  // TODO: replace with Supabase delete
-  _mockAlerts = _mockAlerts.filter((a) => a.id !== id)
+  const client = getSupabaseClient()
+  if (!client) {
+    _mockAlerts = _mockAlerts.filter((a) => a.id !== id)
+    return
+  }
+  const { error } = await client.from('alerts').delete().eq('id', id)
+  if (error) throw new Error(error.message)
 }
 
 export function useDeleteAlert() {
@@ -123,8 +154,6 @@ export function useDeleteAlert() {
       void qc.invalidateQueries({ queryKey: ['alerts'] })
       toast.success('Alerta eliminada')
     },
-    onError: (err: Error) => {
-      toast.error(`Error al eliminar: ${err.message}`)
-    },
+    onError: (err: Error) => toast.error(`Error al eliminar: ${err.message}`),
   })
 }

@@ -30,7 +30,10 @@ export function SailingDetail() {
   const [alertFormOpen, setAlertFormOpen] = useState(false)
 
   const { data: sailing, isLoading: sailingLoading, isError } = useSailing(sailingId)
-  const { data: history = [], isLoading: historyLoading } = usePriceHistory(sailingId)
+  const { data: history = [], isLoading: historyLoading } = usePriceHistory(
+    sailingId,
+    sailing?.cabin_type ?? null,
+  )
 
   if (sailingLoading || historyLoading) {
     return <SailingDetailSkeleton />
