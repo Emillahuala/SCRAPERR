@@ -1,6 +1,6 @@
 // AUTO-GENERATED STUB — regenerar con `supabase gen types typescript --project-id <id>`
 // cuando integremos Supabase real. Mientras tanto, refleja el schema definido en
-// infra/supabase/migrations/0001-0005.
+// infra/supabase/migrations/0001-0006.
 
 export type Json =
   | string
@@ -233,6 +233,44 @@ export interface Database {
           sample_count?: number | null
         }
       }
+      alert_matches: {
+        Row: {
+          id: number
+          alert_id: string
+          user_id: string
+          sailing_id: number
+          cabin_type: string
+          price_usd: number | null
+          z_score: number | null
+          deal_score: number | null
+          notified: boolean | null
+          created_at: string | null
+        }
+        Insert: {
+          id?: number
+          alert_id: string
+          user_id: string
+          sailing_id: number
+          cabin_type: string
+          price_usd?: number | null
+          z_score?: number | null
+          deal_score?: number | null
+          notified?: boolean | null
+          created_at?: string | null
+        }
+        Update: {
+          id?: number
+          alert_id?: string
+          user_id?: string
+          sailing_id?: number
+          cabin_type?: string
+          price_usd?: number | null
+          z_score?: number | null
+          deal_score?: number | null
+          notified?: boolean | null
+          created_at?: string | null
+        }
+      }
     }
     Views: {
       current_deals: {
@@ -260,7 +298,12 @@ export interface Database {
         }
       }
     }
-    Functions: Record<string, never>
+    Functions: {
+      refresh_current_deals: {
+        Args: Record<string, never>
+        Returns: undefined
+      }
+    }
     Enums: Record<string, never>
   }
 }
