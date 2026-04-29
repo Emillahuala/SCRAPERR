@@ -60,6 +60,12 @@ def run(
                 typer.echo(repr(sailing))
             count += 1
 
+        if pipeline is not None:
+            try:
+                pipeline.refresh_deals()
+            except Exception as exc:
+                log.warning("materialized_view_refresh_failed", error=str(exc))
+
     log.info("scrape_finished", site=site, processed=count)
 
 

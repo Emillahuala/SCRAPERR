@@ -20,6 +20,7 @@ class SupabaseLike(Protocol):
     """Minimal subset of the Supabase client we depend on (eases testing)."""
 
     def table(self, name: str) -> Any: ...
+    def rpc(self, fn: str) -> Any: ...
 
 
 class SupabasePipeline:
@@ -123,3 +124,8 @@ class SupabasePipeline:
                 "available": True,
             }
         ).execute()
+
+    def refresh_deals(self) -> None:
+        """Refresh the current_deals materialized view after a scrape run."""
+        self._db.rpc("refresh_current_deals").execute()
+        logger.info("materialized_view_refreshed")
