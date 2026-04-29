@@ -479,6 +479,7 @@ export type Database = {
           region: string | null
           sailing_id: number | null
           ship: string | null
+          source_url: string | null
           stddev_180d: number | null
           z_score: number | null
         }

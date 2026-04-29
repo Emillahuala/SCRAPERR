@@ -88,7 +88,7 @@ export function SailingDetail() {
           🔔 Crear alerta para este zarpe
         </Button>
         <Button asChild>
-          <a href="https://cruceros.cl" target="_blank" rel="noopener noreferrer">
+          <a href={sailing.source_url ?? 'https://www.cruceros.cl'} target="_blank" rel="noopener noreferrer">
             Ver en cruceros.cl ↗
           </a>
         </Button>
