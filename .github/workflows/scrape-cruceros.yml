@@ -25,7 +25,7 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-        run: uv run python -m scraper.cli --site cruceros_cl_home
+        run: uv run python -m scraper.cli run --site cruceros_cl
 
       - name: Upload logs on failure
         if: failure()
