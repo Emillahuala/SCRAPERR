@@ -3,7 +3,7 @@ name: Scrape — cruceros.cl
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */6 * * *'   # cada 6h: 00:00, 06:00, 12:00, 18:00 UTC
+    - cron: '0 0 * * *'   # cada día a las 00:00 UTC
 
 jobs:
   scrape:
