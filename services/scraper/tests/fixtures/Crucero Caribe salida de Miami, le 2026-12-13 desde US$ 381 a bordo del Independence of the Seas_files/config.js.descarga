@@ -1,0 +1,13 @@
+window._env_ = {
+  PUBLIC_SITES_BACKEND_URL: "/public-sites",
+  SELF_IDENTIFIER: "29be1eeb-47ff-4475-82c6-2c9e604d5119",
+  TRANSITION_URL: "https://legacy.cruceros.cl/transitionV4.php",
+  TRANSITION_ENV: "www.cruceros.cl",
+  VERSION: "3.7.2",
+  GTM_ID: "GTM-MTTQWMP",
+  GTM_VERIF_ID: "mzjDQzNR5Oox6k0uJmNB3QZjI2W3qceArVvTRApg_qw",
+  FACEBOOK_DOMAIN_VERIFICATION: "lfo2gkp8nmsm1242rnp1pxjr0ta4bz",
+  NEW_RELIC_BROWSER_SCRIPT_ENABLED: true,
+  CUSTOMER_DOMAIN: "",
+  LOG_LEVEL: ""
+};

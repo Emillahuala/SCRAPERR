@@ -116,6 +116,7 @@ class SupabasePipeline:
         return sailing_id
 
     def _insert_price(self, sailing_id: int, s: CruiseSailing) -> None:
+        # Insert in price_history (full log)
         self._db.table("price_history").insert(
             {
                 "sailing_id": sailing_id,
@@ -123,6 +124,21 @@ class SupabasePipeline:
                 "price_usd": s.price_usd,
                 "available": True,
             }
+        ).execute()
+
+        # Insert/update in price_history_daily (for frontend chart)
+        from datetime import datetime, timezone
+        today = datetime.now(timezone.utc).date().isoformat()
+        self._db.table("price_history_daily").upsert(
+            {
+                "sailing_id": sailing_id,
+                "cabin_type": s.cabin_type,
+                "date": today,
+                "avg_price": s.price_usd,
+                "min_price": s.price_usd,
+                "available": True,
+            },
+            on_conflict="sailing_id,cabin_type,date"
         ).execute()
 
     def refresh_deals(self) -> None:

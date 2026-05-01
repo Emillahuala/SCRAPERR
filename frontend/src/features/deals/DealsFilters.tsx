@@ -24,6 +24,8 @@ const CABIN_TYPES = [
   { value: 'Suite', label: 'Suite' },
 ]
 
+
+export function DealsFilters() {
   const { filters, setRegion, setMaxPrice, setCabinType, setMinDealScore, setSortBy, resetFilters } =
     useFiltersStore()
 
@@ -42,7 +44,7 @@ const CABIN_TYPES = [
             <select
               id="filter-sort"
               value={filters.sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
+              onChange={(e) => setSortBy(e.target.value as import('@/store/filters-store').SortBy)}
               className="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 pr-8 transition-all duration-200 hover:ring-2 hover:ring-green-300 focus:shadow-[0_0_8px_2px_rgba(34,197,94,0.25)]"
             >
               <option value="best">Mejores ofertas</option>
@@ -139,3 +141,4 @@ const CABIN_TYPES = [
     </div>
   )
 }
+

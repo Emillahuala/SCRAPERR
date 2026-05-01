@@ -1,0 +1,357 @@
+@charset "UTF-8";
+
+/* Resets ******************************/
+
+body, html {
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	padding: 0px;
+	background-color:#FFF;
+	font-family: Verdana;
+	font-size:12px;
+}
+
+/* Layers  ******************************/
+
+.clip{
+	position:absolute;
+	width:100%;
+	height:100%;
+	overflow:hidden;
+}
+
+#tilecache {
+	display:none;
+}
+
+#canvas01, #canvas02, #canvas03, #canvas04, #canvas05 {
+	position:absolute;
+	z-index:1;
+}
+
+#canvasTest {
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index:1;
+}
+
+#moveicon {
+	position:absolute;
+	display:none;
+	width:20px;
+	height:20px;
+	background:url('../img/icon_sprite_nob.png');
+	z-index:2;
+}
+
+#iconover {
+	position:absolute;
+	display:none;
+	z-index:3;
+}
+
+#latlon {
+	position:absolute;
+	display:none;
+	z-index:4;
+}
+
+#icons01 {
+	position:absolute;
+	width:100%;
+	height:100%;
+	overflow:hidden;
+	z-index:5;
+}
+
+/* Fullscreen button **********************************/
+
+#screenbutton {
+	position:absolute;
+	display:block;
+	bottom:6px;
+	right:0px;
+	width:130px;
+	height:26px;
+	z-index:8;
+}
+
+#screenbutton_tar {
+	position:absolute;
+	display:block;
+	bottom:0px;
+	right:0px;
+	width:30px;
+	height:30px;
+}
+
+.screenbutton_tar1 {
+	background:url('../img/sprite_nob.png') -100px -155px;
+}
+
+.screenbutton_tar2 {
+	background:url('../img/sprite_nob.png') -270px -155px;
+}
+
+#screenbutton_rollover {
+	position:absolute;
+	display:none;
+	bottom:0px;
+	right:0px;
+	width:130px;
+	height:30px;
+}
+
+.screenbutton_rollover2 {
+	background:url('../img/sprite_nob.png') -170px -125px;
+}
+
+.screenbutton_rollover1 {
+	background:url('../img/sprite_nob.png') -0px -125px;
+}
+
+
+/* Zoom button **********************************/
+
+#zoombutton {
+	position:absolute;
+	display:none;
+	top:10px;
+	left:0px;
+	width:40px;
+	height:80px;
+	z-index:8;
+}
+
+#zoombutton_n {
+	background:url('../img/sprite_nob.png') -344px 0px;
+	position:absolute;
+	display:block;
+	top:0px;
+	left:24px;
+	width:13px;
+	height:14px;
+}
+
+#zoombutton_n:hover {
+	background:url('../img/sprite_nob.png') -384px -0px;
+}
+
+#zoombutton_s {
+	background:url('../img/sprite_nob.png') -344px -19px;
+	position:absolute;
+	display:block;
+	top:23px;
+	left:24px;
+	width:13px;
+	height:15px;
+}
+
+#zoombutton_s:hover {
+	background:url('../img/sprite_nob.png') -384px -19px;
+}
+
+#zoombutton_e {
+	background:url('../img/sprite_nob.png') -353px -10px;
+	position:absolute;
+	display:block;
+	top:12px;
+	left:34px;
+	width:13px;
+	height:13px;
+}
+
+#zoombutton_e:hover {
+	background:url('../img/sprite_nob.png') -393px -10px;
+}
+
+#zoombutton_w {
+	background:url('../img/sprite_nob.png') -330px -10px;
+	position:absolute;
+	display:block;
+	top:12px;
+	left:8px;
+	width:18px;
+	height:13px;
+}
+
+#zoombutton_w:hover {
+	background:url('../img/sprite_nob.png') -370px -10px;
+}
+
+#zoombutton_tar1 {
+	background:url('../img/sprite_nob.png') -330px -38px;
+	position:absolute;
+	display:block;
+	top:35px;
+	left:10px;
+	width:40px;
+	height:20px;
+}
+
+#zoombutton_tar1:hover {
+	background:url('../img/sprite_nob.png') -370px -38px;
+}
+
+#zoombutton_tar2 {
+	background:url('../img/sprite_nob.png') -330px -58px;
+	position:absolute;
+	display:block;
+	top:55px;
+	left:10px;
+	width:40px;
+	height:20px;
+}
+
+#zoombutton_tar2:hover {
+	background:url('../img/sprite_nob.png') -370px -58px;
+}
+
+/* Loader **********************************/
+
+#loader {
+	position:absolute;
+	width:100%;
+	height:100%;
+	background-color:#FFF;
+	z-index:100;
+}
+
+#loader_logo{
+	position:relative;
+	margin-left:auto;
+	margin-right:auto;
+	width:280px;
+	height:117px;	
+	background:url('../img/sprite_nob.png') 0px 0px;
+	z-index:100;
+}
+
+#loader_floater{
+	width:100%;
+	height:50%;
+	margin-bottom:-80px;
+}
+
+#loader_text{
+	text-align:center;
+	padding-top:73px;
+	font-size:18px;
+	color:#999;
+}
+
+/* Rollover **********************************/
+
+.rollover {
+	position:absolute;
+	display:none;
+	width:20px;
+	height:30px;
+	background:url('../img/rollover_nob.png');
+	z-index:9;
+}
+
+.rollover_tx {
+	position:absolute;
+	display:none;
+	color:#FFF;
+	font-size:12px;
+	z-index:9;
+}
+
+/* Popup *************************************/
+
+#popup2 {
+	position:absolute;
+	display:none;
+	left: 40px;
+	top: 40px;
+	border-width: 1px;
+	border-color: #999999;
+	border-style: solid;
+	background-color: #fff;
+	box-shadow: 3px 3px 10px #000;
+	z-index: 10;
+}
+
+#pop_m {
+	width: 100px;
+	height: 184px;
+}
+
+#pop_header {
+	height: 41px;
+	background:url('../img/sprite_nob.png') 0px -186px;
+}
+
+#pop_title {
+	color: #fff;
+	padding-left: 14px;
+	padding-top: 11px;
+	float: left;
+}
+
+#pop_hide {
+	display:block;
+	float: right;
+	width:16px;
+	height:16px;
+	background:url('../img/sprite_nob.png') -280px -5px;
+	margin-right: 9px;
+	margin-top: 12px;
+}
+
+#pop_hide:hover {
+	background:url('../img/sprite_nob.png') -300px -5px;
+}
+
+#pop_im {
+	float:left;
+	padding: 2px;
+	display: block;
+}
+
+#pop_im_box {
+	position:relative;
+}
+
+#pop_tx {
+	float:right;
+	width: 215px;
+	padding: 8px 12px 8px 12px;
+	color: #666;
+	font-size: 11px;
+	line-height: 1.4;
+}
+
+#pop_link {
+	display:block;
+	width:auto;
+	margin: 4px 10px 0px 0px;
+	padding: 2px 0px 4px 0px;
+	color: #ebf2f8;
+	background-color:transparent;
+}
+
+#pop_link_a {
+	color:#326392;
+	text-decoration:none;
+	width:auto;
+}
+
+#pop_link:hover {
+	background-color:#CCCCFF;
+}
+
+/* Scrollbar ******************************/
+
+#scrollbar1 { width: 215px; margin: 0px;}
+#scrollbar1 .viewport { width: 195px; height: 140px; overflow: hidden; position:relative;}
+#scrollbar1 .overview { list-style: none; position: absolute; left: 0; top: 0; }
+#scrollbar1 .thumb { background-color: #999999; border-radius:5px; -moz-border-radius:5px;}
+#scrollbar1 .scrollbar { position: relative; float: right; width: 10px; }
+#scrollbar1 .track { background-color: #ebf2f8; height: 100%; width:10px; position: relative; padding: 0 1px; }
+#scrollbar1 .thumb { height: 10px; width: 10px; cursor: pointer; overflow: hidden; position: absolute; top: 0; }
+#scrollbar1 .disable{ display: none; }
