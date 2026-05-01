@@ -1,10 +1,14 @@
 import { create } from 'zustand'
 
+
+export type SortBy = 'best' | 'price-asc' | 'price-desc'
+
 export interface DealsFilters {
   region: string
   maxPrice: number | null
   cabinType: string
   minDealScore: number
+  sortBy: SortBy
 }
 
 interface FiltersStore {
@@ -13,6 +17,7 @@ interface FiltersStore {
   setMaxPrice: (price: number | null) => void
   setCabinType: (cabin: string) => void
   setMinDealScore: (score: number) => void
+  setSortBy: (sortBy: SortBy) => void
   resetFilters: () => void
 }
 
@@ -21,6 +26,7 @@ const DEFAULT_FILTERS: DealsFilters = {
   maxPrice: null,
   cabinType: '',
   minDealScore: 0,
+  sortBy: 'best',
 }
 
 export const useFiltersStore = create<FiltersStore>((set) => ({
@@ -37,6 +43,9 @@ export const useFiltersStore = create<FiltersStore>((set) => ({
 
   setMinDealScore: (minDealScore) =>
     set((s) => ({ filters: { ...s.filters, minDealScore } })),
+
+  setSortBy: (sortBy) =>
+    set((s) => ({ filters: { ...s.filters, sortBy } })),
 
   resetFilters: () => set({ filters: DEFAULT_FILTERS }),
 }))
