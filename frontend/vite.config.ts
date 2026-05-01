@@ -12,15 +12,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          // React core — changes rarely
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          // Data / state
-          'vendor-query': ['@tanstack/react-query', 'zustand'],
-          // Charts — largest single dependency
-          'vendor-recharts': ['recharts'],
-          // Supabase client
-          'vendor-supabase': ['@supabase/supabase-js'],
+        manualChunks(id) {
+          if (id.includes('react')) return 'vendorReact'
+          if (id.includes('react-router-dom')) return 'vendorReact'
+          if (id.includes('@tanstack/react-query') || id.includes('zustand')) return 'vendorQuery'
+          if (id.includes('recharts')) return 'vendorRecharts'
+          if (id.includes('@supabase/supabase-js')) return 'vendorSupabase'
         },
       },
     },

@@ -27,8 +27,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    /* Silencia deprecaciones TS 6.x */
-    "ignoreDeprecations": "6.0"
+
   },
   "include": ["src"]
 }
