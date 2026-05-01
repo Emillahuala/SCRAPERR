@@ -26,24 +26,33 @@ async function fetchPriceHistory(
   const client = getSupabaseClient()
   if (!client) return MOCK_PRICE_HISTORY[sailingId] ?? []
 
-  // Filter by cabin_type if known, otherwise fetch the most data-rich cabin
-  type PHRow = Database['public']['Tables']['price_history_daily']['Row']
-  const result = await client
-    .from('price_history_daily')
-    .select('*')
+  type PHRaw = Database['public']['Tables']['price_history']['Row']
+  let query = client
+    .from('price_history')
+    .select('price_usd, captured_at')
     .eq('sailing_id', sailingId)
-    .order('date', { ascending: true })
-    .limit(180)
+    .order('captured_at', { ascending: true })
+    .limit(1000)
 
-  if (result.error) throw new Error(result.error.message)
+  if (cabinType) query = query.eq('cabin_type', cabinType)
 
-  const rows = (result.data as PHRow[] | null) ?? []
-  const filtered = cabinType ? rows.filter((r) => r.cabin_type === cabinType) : rows
+  const { data, error } = await query
+  if (error) throw new Error(error.message)
 
-  return filtered.map((r) => ({
-    date: r.date,
-    avg_price: Number(r.avg_price ?? 0),
-    min_price: Number(r.min_price ?? 0),
+  const rows = (data as Pick<PHRaw, 'price_usd' | 'captured_at'>[] | null) ?? []
+
+  // Aggregate captures by day: avg and min price per day
+  const byDay = new Map<string, number[]>()
+  for (const row of rows) {
+    const day = row.captured_at.slice(0, 10)
+    if (!byDay.has(day)) byDay.set(day, [])
+    byDay.get(day)!.push(Number(row.price_usd))
+  }
+
+  return Array.from(byDay.entries()).map(([date, prices]) => ({
+    date,
+    avg_price: Math.round(prices.reduce((s, p) => s + p, 0) / prices.length),
+    min_price: Math.min(...prices),
   }))
 }
 

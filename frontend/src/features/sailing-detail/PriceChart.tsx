@@ -40,12 +40,20 @@ export function PriceChart({ data, avgPrice180d }: PriceChartProps) {
     )
   }
 
-  // Sample every 5 days for readability on small screens
-  const sampled = data.filter((_, i) => i % 5 === 0 || i === data.length - 1)
+  // With a single point, duplicate it so Recharts can draw a line
+  const chartData = data.length === 1 ? [data[0], data[0]] : data
+
+  // Sample every 5 days for readability on small screens (only when many points)
+  const sampled = chartData.length > 10
+    ? chartData.filter((_, i) => i % 5 === 0 || i === chartData.length - 1)
+    : chartData
 
   return (
     <div className="rounded-xl border bg-card p-4">
-      <h3 className="text-sm font-semibold mb-4">Evolución de precios (USD)</h3>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-semibold">Evolución de precios (USD)</h3>
+        <span className="text-xs text-muted-foreground">{data.length} {data.length === 1 ? 'día registrado' : 'días registrados'}</span>
+      </div>
       <ResponsiveContainer width="100%" height={240}>
         <LineChart data={sampled} margin={{ top: 4, right: 16, left: 0, bottom: 4 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
