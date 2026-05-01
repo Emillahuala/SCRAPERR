@@ -28,6 +28,7 @@ export const MOCK_DEALS: DealRow[] = [
     days_to_departure: 201,
     captured_at: '2026-04-27T10:00:00Z',
     deal_score: 88,
+    sample_count: 30,
   },
   {
     sailing_id: 2,
@@ -51,6 +52,7 @@ export const MOCK_DEALS: DealRow[] = [
     days_to_departure: 117,
     captured_at: '2026-04-27T10:00:00Z',
     deal_score: 94,
+    sample_count: 30,
   },
   {
     sailing_id: 3,
@@ -74,6 +76,7 @@ export const MOCK_DEALS: DealRow[] = [
     days_to_departure: 69,
     captured_at: '2026-04-27T10:00:00Z',
     deal_score: 76,
+    sample_count: 30,
   },
   {
     sailing_id: 4,
@@ -97,6 +100,7 @@ export const MOCK_DEALS: DealRow[] = [
     days_to_departure: 236,
     captured_at: '2026-04-27T10:00:00Z',
     deal_score: 82,
+    sample_count: 30,
   },
   {
     sailing_id: 5,
@@ -120,6 +124,7 @@ export const MOCK_DEALS: DealRow[] = [
     days_to_departure: 258,
     captured_at: '2026-04-27T10:00:00Z',
     deal_score: 79,
+    sample_count: 30,
   },
   {
     sailing_id: 6,
@@ -143,6 +148,7 @@ export const MOCK_DEALS: DealRow[] = [
     days_to_departure: 159,
     captured_at: '2026-04-27T10:00:00Z',
     deal_score: 85,
+    sample_count: 30,
   },
   {
     sailing_id: 7,
@@ -166,6 +172,7 @@ export const MOCK_DEALS: DealRow[] = [
     days_to_departure: 140,
     captured_at: '2026-04-27T10:00:00Z',
     deal_score: 90,
+    sample_count: 30,
   },
   {
     sailing_id: 8,
@@ -189,6 +196,7 @@ export const MOCK_DEALS: DealRow[] = [
     days_to_departure: 46,
     captured_at: '2026-04-27T10:00:00Z',
     deal_score: 72,
+    sample_count: 30,
   },
   {
     sailing_id: 9,
@@ -212,6 +220,7 @@ export const MOCK_DEALS: DealRow[] = [
     days_to_departure: 96,
     captured_at: '2026-04-27T10:00:00Z',
     deal_score: 87,
+    sample_count: 30,
   },
   {
     sailing_id: 10,
@@ -235,6 +244,7 @@ export const MOCK_DEALS: DealRow[] = [
     days_to_departure: 254,
     captured_at: '2026-04-27T10:00:00Z',
     deal_score: 93,
+    sample_count: 30,
   },
 ]
 

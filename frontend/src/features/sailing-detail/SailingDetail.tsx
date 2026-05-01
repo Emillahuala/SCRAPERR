@@ -60,8 +60,13 @@ export function SailingDetail() {
         </Button>
         <div className="flex flex-wrap items-start gap-3">
           <h1 className="text-2xl font-bold tracking-tight flex-1">{sailing.itinerary}</h1>
-          <Badge variant={sailing.deal_score && sailing.deal_score >= 60 ? 'success' : 'secondary'}>
-            {dealScoreLabel(sailing.deal_score)}
+          <Badge variant={
+            (sailing.sample_count ?? 0) < 10 ? 'outline'
+            : sailing.deal_score && sailing.deal_score >= 80 ? 'success'
+            : sailing.deal_score && sailing.deal_score >= 60 ? 'secondary'
+            : 'outline'
+          }>
+            {dealScoreLabel(sailing.deal_score, sailing.sample_count)}
           </Badge>
         </div>
         <p className="text-muted-foreground mt-1">

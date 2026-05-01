@@ -60,8 +60,14 @@ export function formatNights(n: number | null | undefined): string {
   return `${n} ${n === 1 ? 'noche' : 'noches'}`
 }
 
-/** Format deal score as a human label. */
-export function dealScoreLabel(score: number | null | undefined): string {
+const MIN_SAMPLES = 10
+
+/** Format deal score as a human label. Requires at least MIN_SAMPLES captures to be reliable. */
+export function dealScoreLabel(
+  score: number | null | undefined,
+  sampleCount: number | null | undefined,
+): string {
+  if ((sampleCount ?? 0) < MIN_SAMPLES) return '⏳ Datos insuficientes'
   if (score == null) return 'Sin datos'
   if (score >= 80) return '🔥 Ofertón'
   if (score >= 60) return '✅ Buena oferta'

@@ -30,8 +30,9 @@ function regionLabel(region: string | null): string {
 
 export function DealCard({ deal }: DealCardProps) {
   const score = deal.deal_score ?? 0
+  const hasEnoughData = (deal.sample_count ?? 0) >= 10
   const scoreVariant: 'success' | 'secondary' | 'outline' =
-    score >= 80 ? 'success' : score >= 60 ? 'secondary' : 'outline'
+    !hasEnoughData ? 'outline' : score >= 80 ? 'success' : score >= 60 ? 'secondary' : 'outline'
 
   return (
     <Card className="flex flex-col hover:shadow-md transition-shadow">
@@ -40,7 +41,7 @@ export function DealCard({ deal }: DealCardProps) {
           <span className="text-xs text-muted-foreground uppercase tracking-wide">
             {regionLabel(deal.region)}
           </span>
-          <Badge variant={scoreVariant}>{dealScoreLabel(deal.deal_score)}</Badge>
+          <Badge variant={scoreVariant}>{dealScoreLabel(deal.deal_score, deal.sample_count)}</Badge>
         </div>
         <h3 className="font-semibold leading-tight text-base mt-1">{deal.itinerary}</h3>
         <p className="text-sm text-muted-foreground">

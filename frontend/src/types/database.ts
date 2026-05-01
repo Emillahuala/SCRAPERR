@@ -478,6 +478,7 @@ export type Database = {
           min_price_180d: number | null
           region: string | null
           sailing_id: number | null
+          sample_count: number | null
           ship: string | null
           source_url: string | null
           stddev_180d: number | null
