@@ -44,7 +44,7 @@ export function DealsFilters() {
             <select
               id="filter-sort"
               value={filters.sortBy}
-              onChange={(e) => setSortBy(e.target.value as import('@/store/filters-store').SortBy)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSortBy(e.target.value as import('@/store/filters-store').SortBy)}
               className="flex h-9 w-full appearance-none rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 pr-8 transition-all duration-200 hover:ring-2 hover:ring-green-300 focus:shadow-[0_0_8px_2px_rgba(34,197,94,0.25)]"
             >
               <option value="best">Mejores ofertas</option>
@@ -52,9 +52,15 @@ export function DealsFilters() {
               <option value="price-desc">Precio más alto</option>
             </select>
             <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-green-400 drop-shadow-glow">
-              {filters.sortBy === 'best' && <FaStar className="inline animate-pulse" />}
-              {filters.sortBy === 'price-asc' && <FaSortAmountDown className="inline animate-bounce" />}
-              {filters.sortBy === 'price-desc' && <FaSortAmountUpAlt className="inline animate-bounce" />}
+              {filters.sortBy === 'best' && (
+                <span className="inline animate-pulse"><FaStar /></span>
+              )}
+              {filters.sortBy === 'price-asc' && (
+                <span className="inline animate-bounce"><FaSortAmountDown /></span>
+              )}
+              {filters.sortBy === 'price-desc' && (
+                <span className="inline animate-bounce"><FaSortAmountUpAlt /></span>
+              )}
             </span>
           </div>
         </div>
@@ -65,7 +71,7 @@ export function DealsFilters() {
           <select
             id="filter-region"
             value={filters.region}
-            onChange={(e) => setRegion(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setRegion(e.target.value)}
             className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 transition-all duration-200 hover:ring-2 hover:ring-green-300"
           >
             {REGIONS.map((r) => (
@@ -82,7 +88,7 @@ export function DealsFilters() {
           <select
             id="filter-cabin"
             value={filters.cabinType}
-            onChange={(e) => setCabinType(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCabinType(e.target.value)}
             className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 transition-all duration-200 hover:ring-2 hover:ring-green-300"
           >
             {CABIN_TYPES.map((c) => (
@@ -103,7 +109,7 @@ export function DealsFilters() {
             step={100}
             placeholder="Sin límite"
             value={filters.maxPrice ?? ''}
-            onChange={(e) =>
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setMaxPrice(e.target.value ? Number(e.target.value) : null)
             }
             className="transition-all duration-200 focus:ring-2 focus:ring-green-400 hover:ring-2 hover:ring-green-300"
@@ -121,7 +127,7 @@ export function DealsFilters() {
             step={10}
             placeholder="0"
             value={filters.minDealScore || ''}
-            onChange={(e) => setMinDealScore(Number(e.target.value))}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMinDealScore(Number(e.target.value))}
             className="transition-all duration-200 focus:ring-2 focus:ring-green-400 hover:ring-2 hover:ring-green-300"
           />
         </div>
