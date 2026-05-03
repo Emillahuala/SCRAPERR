@@ -1,0 +1,38 @@
+name: Scrape — cruceros.cl
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'   # cada día a las 00:00 UTC
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        working-directory: services/scraper
+        run: uv sync
+
+      - name: Run scraper
+        working-directory: services/scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: uv run python -m scraper.cli --site cruceros_cl
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraper-logs
+          path: services/scraper/*.log
+          retention-days: 7
